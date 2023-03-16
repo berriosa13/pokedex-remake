@@ -1,8 +1,12 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Login from "./login.js";
+import { useRouter } from "next/router";
+
 
 function HomePage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
+
 
   if (status === "loading") return <h1> loading... please wait</h1>;
   if (status === "authenticated") {
@@ -15,6 +19,7 @@ function HomePage() {
     );
   }
   return (
+    // router.push("/login")
       <Login/>
   );
 }

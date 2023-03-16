@@ -12,7 +12,7 @@ export default function Layout({ children }) {
             />
           </video>
         </div>
-        <div className="m-auto z-100 bg-neutral-300 rounded-lg">{children}</div>
+        <div className=" m-auto w-96 z-100 bg-neutral-300 rounded-lg w-">{children}</div>
       </div>
   );
 }
