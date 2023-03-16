@@ -1,0 +1,42 @@
+import { toast, ToastContainer, Zoom } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { Card, Button } from "react-bootstrap";
+
+export default function Login() {
+  const { data: session, status } = useSession();
+
+  return (
+    <div>
+      <Head>
+        <title>Login</title>
+      </Head>
+
+      <div className={styles.vertical_center}>
+        <div className={styles.featured}>
+          <video muted autoPlay loop className={styles.myVideo}>
+            <source
+              className={styles.overlay}
+              src="../video/pexels-mr-borys-8295528.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+
+        <Card rounded className={styles.image_box}>
+          <Card.Img
+            className={styles.home_image}
+            variant="top"
+            src="https://fontmeme.com/permalink/210729/8c92d652b67e3e5fe9ae253bd6e0b24a.png"
+          />
+          <Card.Body>
+            <Card.Text className={styles.card_body}>Use one of the login methods below to start using the pokedex!</Card.Text>
+            <Button className={styles.google_button} variant="warning">Login</Button>
+          </Card.Body>
+        </Card>
+      </div>
+    </div>
+  );
+}
