@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 import { SessionProvider } from "next-auth/react"
-import { useEffect } from "react";
 
 export default function App({
   Component,
@@ -10,7 +9,7 @@ export default function App({
   return (
     // `session` comes from `getServerSideProps` or `getInitialProps`.
     // Avoids flickering/session loading on first load.
-    <SessionProvider session={session} refetchInterval={5 * 60}>
+    <SessionProvider session={session}>
       <Component {...pageProps} />
     </SessionProvider>
   )

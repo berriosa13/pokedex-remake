@@ -4,8 +4,20 @@ import Link from "next/link";
 import styles from "../styles/Form.module.css";
 import Image from "next/image";
 import { HiFingerPrint, HiAtSymbol } from "react-icons/hi";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
+
+    // Google Handler
+    async function handleGoogleSignIn() {
+      console.log('inside handleGoogleSignIn method')
+        signIn('google', { callbackUrl:'http://localhost:3000/'})
+    }
+    //Github handler
+    async function handleGithubSignIn() {
+        signIn('github', { callbackUrl:'http://localhost:3000/'})
+    }
+
   return (
     <Layout>
       <Head>
@@ -15,12 +27,12 @@ export default function Login() {
       <section className="w-3/4 m-auto flex flex-col gap-10">
         <img
           className="mt-5 z-50 opacity-100"
-          src="https://fontmeme.com/permalink/210729/8c92d652b67e3e5fe9ae253bd6e0b24a.png"
+          src="https://fontmeme.com/permalink/230316/187efe9a23703852ffc83845a6e0fdb1.png"
         />
         <div className="title z-50 opacity-100">
           <h1 className="text-center font-bold text-5xl">Login</h1>
         </div>
-        <p className="w-3/4 text-center m-auto text-black font-bold z-20">
+        <p className="w-3/4 text-center m-auto text-black font-bold z-20 text-xl">
           Use one of the login methods below to start using the pokedex!
         </p>
 
@@ -51,18 +63,18 @@ export default function Login() {
 
           {/* login buttons */}
           <div className="input-button">
-            <button type="submit" className={styles.button}>
+            <button type="button" className={styles.button}>
               Login
             </button>
           </div>
           <div className="input-button bg-white">
-            <button type="submit" className={styles.button_custom}>
+            <button type="button" onClick={handleGoogleSignIn} className={styles.button_custom}>
               Sign In with Google{" "}
               <Image src={"/assets/google.svg"} width={20} height={20}></Image>
             </button>
           </div>
           <div className="input-button bg-white">
-            <button type="submit" className={styles.button_custom}>
+            <button type="button" onClick={handleGithubSignIn} className={styles.button_custom}>
               Sign In with Github{" "}
               <Image
                 src={"/assets/github.svg"}
@@ -77,7 +89,7 @@ export default function Login() {
         <p className="text-center text-black font-bold z-10 mb-3">
           Don't have an account yet?{" "}
           <Link href={"/register"}>
-            <a className="text-blue-700">Sign Up</a>
+            <a className="text-blue-700 mx-1">Sign Up</a>
           </Link>
         </p>
       </section>

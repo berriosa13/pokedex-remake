@@ -13,13 +13,13 @@ export default function Register() {
       <section className="w-3/4 m-auto flex flex-col gap-10">
         <img
           className="mt-5 z-50 opacity-100"
-          src="https://fontmeme.com/permalink/210729/8c92d652b67e3e5fe9ae253bd6e0b24a.png"
+          src="https://fontmeme.com/permalink/230316/187efe9a23703852ffc83845a6e0fdb1.png"
         />
         <div className="title z-50 opacity-100">
           <h1 className="text-center font-bold text-5xl">Register</h1>
         </div>
-        <p className="w-3/4 z-50 text-center m-auto text-black font-bold z-20">
-          Fill out the fields below to sign up
+        <p className="w-3/4 z-50 text-center m-auto text-black font-bold z-20 text-xl">
+          Fill out the fields below to sign up.
         </p>
 
         {/* form */}
@@ -69,7 +69,7 @@ export default function Register() {
         <p className="text-center text-black font-bold z-10 mb-3">
           Already have an account?{" "}
           <Link href={"/login"}>
-            <a className="text-blue-700">Login</a>
+            <a className="text-blue-700 mx-1">Login</a>
           </Link>
         </p>
       </section>
