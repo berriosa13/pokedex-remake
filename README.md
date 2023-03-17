@@ -6,7 +6,7 @@ An application used to search any pokemon you could think of and have a beatiufu
 
 ## Project Status:
 
-####: In Development
+#### In Development
 
 This project is currently in development. Users can access the main application by using one of the various login method presented on the home page. These include but are not limited to Google signin, GitHub sign-in, and down the road, fully fledged user registration tied to a cloud database (logistics yet to be determined). 
 
