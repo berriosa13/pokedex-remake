@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@ramonak/react-progress-bar": "^5.0.3",
     "next": "^12.2.5",
     "next-auth": "^4.10.0",
     "next-pwa": "5.5.4",
