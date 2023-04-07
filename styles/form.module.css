@@ -13,6 +13,16 @@
     @apply py-3 text-gray-50 text-lg;
 }
 
+.pokedex_search_btn {
+    @apply w-full bg-yellow-400 rounded-md hover:bg-yellow-300;
+    @apply py-3 text-white text-lg;
+}
+
+.pokedex_logout_button {
+    @apply w-32 bg-red-600 rounded-md hover:bg-red-500;
+    @apply py-3 text-white text-lg;
+}
+
 /* .button:hover{
     @apply bg-gradient-to-r from-gray-50 to-gray-100 border-blue-500;
     @apply text-gray-700 border;
