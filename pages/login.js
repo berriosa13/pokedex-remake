@@ -21,7 +21,7 @@ export default function Login() {
   return (
     <Layout>
       <Head>
-        <title>Login</title>
+        <title>Pokédex-Login</title>
       </Head>
 
       <section className="w-3/4 m-auto flex flex-col gap-10">

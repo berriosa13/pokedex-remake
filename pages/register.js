@@ -7,7 +7,7 @@ export default function Register() {
   return (
     <Layout>
       <Head>
-        <title>Register</title>
+        <title>Pokédex-Register</title>
       </Head>
 
       <section className="w-3/4 m-auto flex flex-col gap-10">
