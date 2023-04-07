@@ -2,7 +2,7 @@
 
 Pokedex 
 
-An application used to search any pokemon you could think of and have a beatiufully created custom pokemon card with all of its stats listed to view. Utilizes pokeAPI
+An application used to search any Pokémon you could think of and have a beautifully created custom Pokémon card with all of its stats listed to view. Utilizes pokeAPI
 
 ## Project Status:
 
