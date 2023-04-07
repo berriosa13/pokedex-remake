@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Layout from "../layout/layout";
 import Link from "next/link";
-import styles from "../styles/Form.module.css";
+import styles from "../styles/form.module.css";
 import Image from "next/image";
 import { HiFingerPrint, HiAtSymbol } from "react-icons/hi";
 import { signIn } from "next-auth/react";
