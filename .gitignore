@@ -1,5 +1,6 @@
 # environment files 
 .env*.local
+.env
 node_modules
 
 # next.js
