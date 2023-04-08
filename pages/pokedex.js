@@ -6,7 +6,7 @@ import formStyles from "../styles/form.module.css";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { TbLogout } from "react-icons/tb";
 import Spinner from "../components/spinner";
-import ProgressBar from "../components/progressbar";
+import ProgressBar from "../components/progressBar";
 
 export default function Pokedex() {
   const { data: session } = useSession();
