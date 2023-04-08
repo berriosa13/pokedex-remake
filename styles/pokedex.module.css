@@ -177,6 +177,7 @@
   text-align: center;
   color: black;
   margin-bottom: 1rem;
+  text-decoration: 1.5px solid black underline;
 }
 /* progress,
 progress[role] {
