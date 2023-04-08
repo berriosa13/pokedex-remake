@@ -27,6 +27,7 @@ export default function Pokedex() {
   const [mainType, setMainType] = useState("");
   const [subType, setSubType] = useState("");
   const [pokemonSpriteImage, setPokemonSpriteImage] = useState(null);
+  const [officialArtwork, setOfficialArtwork] = useState(null);
   const [pokemonHeight, setPokemonHeight] = useState("");
   const [pokemonWeight, setPokemonWeight] = useState("");
 
@@ -48,6 +49,7 @@ export default function Pokedex() {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
+      console.log(data)
       setPokemonData(data);
       toPokemonValues(data);
       setIsLoading(false);
@@ -77,6 +79,7 @@ export default function Pokedex() {
         setPokemonWeight(data?.weight);
         setSpeciesName(data?.species?.name);
         setPokemonSpriteImage(data?.sprites?.other?.dream_world?.front_default);
+        setOfficialArtwork(data?.sprites?.front_default);
       } catch (error) {
         setError("Error setting pokemon values from api" + "\n" + error);
       }
@@ -248,11 +251,20 @@ export default function Pokedex() {
                 </div>
                 <div className={pokedexStyles.pokemon_id}># {pokemonId}</div>
               </div>
-              <img
+              {pokemonSpriteImage != null && (
+                <img
                 className={pokedexStyles.pokemon_image}
                 src={pokemonSpriteImage}
                 alt=""
-              />
+                />
+              )}
+              {pokemonSpriteImage == null && officialArtwork != null && (
+                <img
+                className={pokedexStyles.pokemon_image}
+                src={officialArtwork}
+                alt=""
+                />
+              )}
             </div>
             {/* If both mainType & subType have values display both, assume only mainType is present */}
             <div className="flex justify-evenly align-center">
