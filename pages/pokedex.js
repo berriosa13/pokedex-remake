@@ -242,14 +242,14 @@ export default function Pokedex() {
         <div className="flex justify-center align-center">
           <div
             className={pokedexStyles.pokemon}
-            style={{ backgroundColor: getBackgroundColor() }}
+            style={{ backgroundColor: getBackgroundColor(mainType) }}
           >
             <div className={pokedexStyles.pokemon_image_bg}>
               <div className={pokedexStyles.top_header}>
                 <div className={pokedexStyles.pokemon_name}>
                   {speciesName.toUpperCase()}
                 </div>
-                <div className={pokedexStyles.pokemon_id}># {pokemonId}</div>
+                <div className={pokedexStyles.pokemon_id}>#{pokemonId}</div>
               </div>
               {pokemonSpriteImage != null && (
                 <img
