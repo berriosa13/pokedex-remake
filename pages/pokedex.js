@@ -91,6 +91,8 @@ export default function Pokedex() {
   function getTextColor(type) {
     // const type = pokemonData?.types[0]?.type?.name;
     switch (type) {
+      case "fire":
+        return "#D6350c";
       case "grass":
         return "#89E78F";
       case "electric":
@@ -171,7 +173,11 @@ export default function Pokedex() {
           </button>
         </form>
       </div>
-      {isLoading && <div className={pokedexStyles.spinner}><Spinner /></div>}
+      {isLoading && (
+        <div className={pokedexStyles.spinner}>
+          <Spinner />
+        </div>
+      )}
       {error && (
         <div className={pokedexStyles.invalid_placeholder}>{error}</div>
       )}
@@ -219,7 +225,7 @@ export default function Pokedex() {
             <div className="flex flex-col justify-center justify-center items-center mx-auto">
               <div className={progressBarStyles.progress_bars}>
                 <p className="mx-2 font-bold">
-                HP | {pokemonData.stats[0].base_stat}
+                  HP | {pokemonData.stats[0].base_stat}
                 </p>
                 <progress
                   className={getTextColor()}
@@ -237,7 +243,7 @@ export default function Pokedex() {
               </div>
               <div className={progressBarStyles.progress_bars}>
                 <p className="mx-2 font-bold">
-                ATK | {pokemonData.stats[1].base_stat}
+                  ATK | {pokemonData.stats[1].base_stat}
                 </p>
                 <progress
                   className={pokemonTypeClassName}
