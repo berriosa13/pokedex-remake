@@ -25,7 +25,7 @@ export default function ProgressBar({ value, min, max, color, width }) {
             transform: translateY(-50%);
             width: 100%;
             height: 14px;
-            border-radius: 2px;
+            border-radius: 5px;
           }
           
           .progress {
