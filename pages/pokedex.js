@@ -154,7 +154,7 @@ export default function Pokedex() {
       </section>
       <div className={pokedexStyles.input_fields}>
         <form className="w-1/4" onSubmit={handleSubmit}>
-          <label class="relative block mb-3">
+          <label className="relative block mb-3">
             <span className="sr-only">Search</span>
             <span className="absolute inset-y-0 left-0 flex items-center pl-2">
               <HiOutlineMagnifyingGlass className="h-5 w-5 fill-slate-300" />
