@@ -1,5 +1,6 @@
 # environment files 
 .env*.local
+.env*.production
 .env
 node_modules
 
