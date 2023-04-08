@@ -11,11 +11,11 @@ export default function Login() {
     // Google Handler
     async function handleGoogleSignIn() {
       console.log('inside handleGoogleSignIn method')
-        signIn('google', { callbackUrl:'http://localhost:3000/'})
+        signIn('google', { callbackUrl: process.env.NEXT_PUBLIC_GOOGLE_CALLBACK_URL})
     }
     //Github handler
     async function handleGithubSignIn() {
-        signIn('github', { callbackUrl:'http://localhost:3000/'})
+        signIn('github', { callbackUrl:process.env.NEXT_PUBLIC_GITHUB_CALLBACK_URL})
     }
 
   return (
