@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import { useState, useEffect, React } from "react";
 import { useSession, getSession, signOut } from "next-auth/react";
 import progressBarStyles from "../styles/progressBars.module.css";
 import pokedexStyles from "../styles/pokedex.module.css";
@@ -6,6 +6,7 @@ import formStyles from "../styles/form.module.css";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { TbLogout } from "react-icons/tb";
 import Spinner from "../components/spinner";
+import ProgressBar from "../components/progressbar";
 
 export default function Pokedex() {
   const { data: session } = useSession();
@@ -15,22 +16,40 @@ export default function Pokedex() {
   }
 
   const base_url = "https://pokeapi.co/api/v2/pokemon/";
-  const [pokemonName, setPokemonName] = useState("");
+  const [inputPokemonName, setInputPokemonName] = useState("");
   const [pokemonData, setPokemonData] = useState(null);
-  const [pokemonTypeClassName, setPokemonTypeClassName] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // attribute consts
+  const [pokemonId, setPokemonId] = useState("");
+  const [speciesName, setSpeciesName] = useState("");
+  const [mainType, setMainType] = useState("");
+  const [subType, setSubType] = useState("");
+  const [pokemonSpriteImage, setPokemonSpriteImage] = useState(null);
+  const [pokemonHeight, setPokemonHeight] = useState("");
+  const [pokemonWeight, setPokemonWeight] = useState("");
+
+  // Stat consts
+  const [baseExp, setBaseExp] = useState("");
+  const [baseHp, setBaseHp] = useState("");
+  const [baseAtk, setBaseAtk] = useState("");
+  const [baseDf, setBaseDf] = useState("");
+  const [baseSpAtk, setBaseSpAtk] = useState("");
+  const [baseSpDf, setBaseSpDf] = useState("");
+  const [baseSpd, setBaseSpd] = useState("");
+
+  // Function to fetch pokemon api data
   const fetchPokemon = async (e) => {
     setIsLoading(true);
     setError(null);
-    const apiUrl = `${base_url}${pokemonName.toLowerCase()}`;
+    const apiUrl = `${base_url}${inputPokemonName.toLowerCase()}`;
 
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
       setPokemonData(data);
-      setPokemonTypeClassName(pokemonData?.types[0]?.type?.name);
+      toPokemonValues(data);
       setIsLoading(false);
     } catch (error) {
       setPokemonData(null);
@@ -39,13 +58,45 @@ export default function Pokedex() {
     }
   };
 
+  // Function to set pokemon const values to be used in returned jsx elements
+  const toPokemonValues = (data) => {
+    if (data != null) {
+      try {
+        // set all values
+        setPokemonId(data?.id);
+        setBaseExp(data?.base_experience);
+        setBaseHp(data?.stats[0]?.base_stat);
+        setBaseAtk(data?.stats[1]?.base_stat);
+        setBaseDf(data?.stats[2]?.base_stat);
+        setBaseSpAtk(data?.stats[3]?.base_stat);
+        setBaseSpDf(data?.stats[4]?.base_stat);
+        setBaseSpd(data?.stats[5]?.base_stat);
+        setMainType(data?.types[0]?.type.name);
+        setSubType(data?.types[1]?.type.name);
+        setPokemonHeight(data?.height);
+        setPokemonWeight(data?.weight);
+        setSpeciesName(data?.species?.name);
+        setPokemonSpriteImage(data?.sprites?.other?.dream_world?.front_default);
+      } catch (error) {
+        setError("Error setting pokemon values from api" + "\n" + error);
+      }
+    }
+  };
+
+  const getMinStat = (baseStat) => {
+    return Math.round(baseStat / 2);
+  };
+
+  const getMaxStat = (baseStat) => {
+    return Math.round(baseStat * 2 + 5);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchPokemon();
   };
 
   function getBackgroundColor(type) {
-    // const type = pokemonData?.types[0]?.type?.name;
     switch (type) {
       case "fire":
         return "#974948";
@@ -107,6 +158,8 @@ export default function Pokedex() {
         return "#F8AEC9";
       case "poison":
         return "#7C017C";
+      case "flying":
+        return "#C4C4C4";
       case "bug":
         return "#62960E";
       case "dragon":
@@ -129,6 +182,7 @@ export default function Pokedex() {
         return "#000";
     }
   }
+
   return (
     <section>
       <div className={pokedexStyles.logout_btn_wrapper}>
@@ -164,8 +218,8 @@ export default function Pokedex() {
               type="text"
               name="search"
               placeholder="Enter Pokemon Name or ID"
-              value={pokemonName}
-              onChange={(e) => setPokemonName(e.target.value)}
+              value={inputPokemonName}
+              onChange={(e) => setInputPokemonName(e.target.value)}
             />
           </label>
           <button className={formStyles.pokedex_search_btn} type="submit">
@@ -190,109 +244,159 @@ export default function Pokedex() {
             <div className={pokedexStyles.pokemon_image_bg}>
               <div className={pokedexStyles.top_header}>
                 <div className={pokedexStyles.pokemon_name}>
-                  {pokemonData.species.name.toUpperCase()}
+                  {speciesName.toUpperCase()}
                 </div>
-                <div className={pokedexStyles.pokemon_id}>
-                  # {pokemonData.id}
-                </div>
+                <div className={pokedexStyles.pokemon_id}># {pokemonId}</div>
               </div>
               <img
                 className={pokedexStyles.pokemon_image}
-                src={pokemonData.sprites.other.dream_world.front_default}
+                src={pokemonSpriteImage}
                 alt=""
               />
             </div>
-            <div className={pokedexStyles.type}>
-              <div
-                className={pokedexStyles.type_header}
-                style={{
-                  backgroundColor: getTextColor(pokemonData.types[0].type.name),
-                }}
-              >
-                &nbsp; {pokemonData.types[0].type.name.toUpperCase()} &nbsp;
-              </div>
+            {/* If both mainType & subType have values display both, assume only mainType is present */}
+            <div className="flex justify-evenly align-center">
+              {mainType && subType != null && (
+                <>
+                  <div className={pokedexStyles.type}>
+                    <div
+                      className={pokedexStyles.type_header}
+                      style={{
+                        backgroundColor: getTextColor(mainType),
+                      }}
+                    >
+                      {mainType.toUpperCase()}
+                    </div>
+                  </div>
+                  <div className={pokedexStyles.type}>
+                    <div
+                      className={pokedexStyles.type_header}
+                      style={{
+                        backgroundColor: getTextColor(subType),
+                      }}
+                    >
+                      {subType.toUpperCase()}
+                    </div>
+                  </div>
+                </>
+              )}
+              {!subType && (
+                <div className={pokedexStyles.type}>
+                  <div
+                    className={pokedexStyles.type_header}
+                    style={{
+                      backgroundColor: getTextColor(mainType),
+                    }}
+                  >
+                    {mainType.toUpperCase()}
+                  </div>
+                </div>
+              )}
             </div>
+
             <div className={pokedexStyles.hw}>
               <div className={pokedexStyles.height_header}>
-                Height:&nbsp;{pokemonData.height}'&nbsp;|&nbsp;{" "}
+                Height:&nbsp;{pokemonHeight}'&nbsp;|&nbsp;{" "}
               </div>
               <div className={pokedexStyles.height_header}>
-                Weight:&nbsp;{pokemonData.weight} lbs.
+                Weight:&nbsp;{pokemonHeight} lbs.
               </div>
             </div>
             <div className={pokedexStyles.base_stats}>Base Stats</div>
 
-            <div className="flex flex-col justify-center justify-center items-center mx-auto">
+            <div className="flex flex-col justify-center items-evenly mx-auto">
               <div className={progressBarStyles.progress_bars}>
-                <p className="mx-2 font-bold">
-                  HP | {pokemonData.stats[0].base_stat}
-                </p>
-                <progress
-                  className={getTextColor()}
-                  style={{
-                    "--progress-color": getTextColor(
-                      pokemonData.types[0].type.name
-                    ),
-                  }}
-                  value={pokemonData.stats[0].base_stat}
-                  max="500"
-                ></progress>
+                <p className="mx-3 font-bold">HP | {baseHp}</p>
+                <ProgressBar
+                  value={baseHp}
+                  min={getMinStat(baseHp)}
+                  max={getMaxStat(baseHp)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
                 <p className="px-2 font-bold">
-                  min: 50 &nbsp;max: {pokemonData.stats[1].base_stat * 2 + 5}
+                  min: {getMinStat(baseHp)} &nbsp;max: {getMaxStat(baseHp)}
                 </p>
               </div>
               <div className={progressBarStyles.progress_bars}>
-                <p className="mx-2 font-bold">
-                  ATK | {pokemonData.stats[1].base_stat}
-                </p>
-                <progress
-                  className={pokemonTypeClassName}
-                  value={pokemonData.stats[1].base_stat}
-                  max={pokemonData.stats[1].base_stat * 2 + 5}
-                ></progress>
+                <p className="mx-3 font-bold">ATK | {baseAtk}</p>
+                <ProgressBar
+                  value={baseAtk}
+                  min={getMinStat(baseAtk)}
+                  max={getMaxStat(baseAtk)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
                 <p className="px-2 font-bold">
-                  min: 50 &nbsp;max: {pokemonData.stats[1].base_stat * 2 + 5}
+                  min: {getMinStat(baseAtk)} &nbsp;max: {getMaxStat(baseAtk)}
                 </p>
               </div>
               <div className={progressBarStyles.progress_bars}>
-                <p className="mx-2 font-bold">
-                  DEF | {pokemonData.stats[2].base_stat}
-                </p>
-                <progress
-                  className={pokemonTypeClassName}
-                  value={pokemonData.stats[2].base_stat}
-                  max={pokemonData.stats[2].base_stat * 2 + 5}
-                ></progress>
+                <p className="mx-3 font-bold">DEF | {baseDf}</p>
+                <ProgressBar
+                  value={baseDf}
+                  min={getMinStat(baseDf)}
+                  max={getMaxStat(baseDf)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
                 <p className="px-2 font-bold">
-                  min: 50 &nbsp;max: {pokemonData.stats[1].base_stat * 2 + 5}
+                  min: {getMinStat(baseDf)} &nbsp;max: {getMaxStat(baseDf)}
                 </p>
               </div>
               <div className={progressBarStyles.progress_bars}>
-                <p className="mx-2 font-bold">
-                  SPD | {pokemonData.stats[5].base_stat}
-                </p>
-                <progress
-                  className={pokemonTypeClassName}
-                  value={pokemonData.stats[5].base_stat}
-                  max={pokemonData.stats[5].base_stat * 2 + 5}
-                ></progress>
+                <p className="mx-3 font-bold">SPD | {baseSpd}</p>
+                <ProgressBar
+                  value={baseSpd}
+                  min={getMinStat(baseSpd)}
+                  max={getMaxStat(baseSpd)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
                 <p className="px-2 font-bold">
-                  min: 50 &nbsp;max: {pokemonData.base_experience * 2 + 5}
+                  min: {getMinStat(baseSpd)} &nbsp;max: {getMaxStat(baseSpd)}
                 </p>
               </div>
               <div className={progressBarStyles.progress_bars}>
-                <p className="mx-2 font-bold">
-                  EXP | {pokemonData.base_experience}
-                </p>
-                <progress
-                  className={pokemonTypeClassName}
-                  value={pokemonData.base_experience}
-                  max={pokemonData.base_experience * 2 + 5}
-                ></progress>
+                <p className="mx-3 font-bold">SP-ATK | {baseSpAtk}</p>
+                <ProgressBar
+                  value={baseSpAtk}
+                  min={getMinStat(baseSpAtk)}
+                  max={getMaxStat(baseSpAtk)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
                 <p className="px-2 font-bold">
-                  min: 50 &nbsp;max: {pokemonData.base_experience * 2 + 5}
+                  min: {getMinStat(baseSpAtk)} &nbsp;max:{" "}
+                  {getMaxStat(baseSpAtk)}
                 </p>
               </div>
+              <div className={progressBarStyles.progress_bars}>
+                <p className="mx-3 font-bold">SP-DF | {baseSpDf}</p>
+                <ProgressBar
+                  value={baseSpDf}
+                  min={getMinStat(baseSpDf)}
+                  max={getMaxStat(baseSpDf)}
+                  color={getTextColor(mainType)}
+                  width="150px"
+                />
+                <p className="px-2 font-bold">
+                  min: {getMinStat(baseSpDf)} &nbsp;max: {getMaxStat(baseSpDf)}
+                </p>
+              </div>
+              {/* <div className={progressBarStyles.progress_bars}>
+                <p className="mx-3 font-bold">EXP | {baseExp}</p>
+                <ProgressBar
+                  value={baseExp}
+                  min={getMinStat(baseExp)}
+                  max={getMaxStat(baseExp)}
+                  color={getMaxStat(baseExp)}
+                  width="150px"
+                />
+                <p className="px-2 font-bold">
+                  min: {getMinStat(baseExp)} &nbsp;max: {getMaxStat(baseExp)}
+                </p>
+              </div> */}
             </div>
           </div>
         </div>
