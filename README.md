@@ -6,15 +6,17 @@ An application used to search any Pokémon you could think of and have a beautif
 
 ## Project Status:
 
-#### In Development
+#### LIVE
 
-This project is currently in development. Users can access the main application by using one of the various login method presented on the home page. These include but are not limited to Google signin, GitHub sign-in, and down the road, fully fledged user registration tied to a cloud database (logistics yet to be determined). 
+This project's first iteration has recently be published. Users can access the main application by using one of the various login method presented on the home page. These include but are not limited to Google signin, GitHub sign-in, and down the road, fully fledged user registration tied to a cloud database. 
 
 ## Project Screen Shot(s)
 
-[ SCREENSHOTS COMING SOON ]
+![pokedex2](https://user-images.githubusercontent.com/54926487/230783616-6aa5ade1-0159-4fb2-9f9a-9bfbb30bb096.png)
 
-[ SCREENSHOTS COMING SOON ]
+![pokedex3](https://user-images.githubusercontent.com/54926487/230783619-44c4b755-889d-438d-b7cc-62d40455c7c3.png)
+
+![pokedex1](https://user-images.githubusercontent.com/54926487/230783608-0332a366-7574-40cf-b098-f137327cd499.png)
 
 ## Technologies Used
 
