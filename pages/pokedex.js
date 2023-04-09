@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from "react";
-import { useSession, getSession, signOut } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import progressBarStyles from "../styles/progressBars.module.css";
 import pokedexStyles from "../styles/pokedex.module.css";
 import formStyles from "../styles/form.module.css";
@@ -7,17 +7,13 @@ import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { TbLogout } from "react-icons/tb";
 import Spinner from "../components/spinner";
 import ProgressBar from "../components/progressBar";
+import CreatableSelect from "react-select/creatable";
 
 export default function Pokedex() {
-  const { data: session } = useSession();
-
-  function handleSignOut() {
-    signOut();
-  }
-
   const base_url = "https://pokeapi.co/api/v2/pokemon/";
   const [inputPokemonName, setInputPokemonName] = useState("");
   const [pokemonData, setPokemonData] = useState(null);
+  const [pokemonOptions, setPokemonOptions] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +45,7 @@ export default function Pokedex() {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setPokemonData(data);
       toPokemonValues(data);
       setIsLoading(false);
@@ -60,11 +56,24 @@ export default function Pokedex() {
     }
   };
 
+  // Hook that gets a list of pokemon to set as options in the select component
+  useEffect(() => {
+    const fetchPokemonList = async () => {
+      const response = await fetch(`${base_url}?limit=100`);
+      const data = await response.json();
+      const pokemonList = data.results.map((pokemon) => ({
+        value: pokemon.name,
+        label: toUpperCaseFirstLetter(pokemon.name),
+      }));
+      setPokemonOptions(pokemonList);
+    };
+    fetchPokemonList();
+  }, []);
+
   // Function to set pokemon const values to be used in returned jsx elements
   const toPokemonValues = (data) => {
     if (data != null) {
       try {
-        // set all values
         setPokemonId(data?.id);
         setBaseExp(data?.base_experience);
         setBaseHp(data?.stats[0]?.base_stat);
@@ -94,9 +103,44 @@ export default function Pokedex() {
     return Math.round(baseStat * 2 + 5);
   };
 
+  function handleSignOut() {
+    signOut();
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchPokemon();
+  };
+
+  const handleInputChange = (newValue) => {
+    const pokemonName = newValue?.value;
+    console.log("new value: " + pokemonName);
+    setInputPokemonName(pokemonName);
+  };
+
+  const toUpperCaseFirstLetter = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  };
+
+  const handleCreateOption = async (inputValue) => {
+    const apiUrl = `${base_url}${inputValue.toLowerCase()}`;
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      const newOption = {
+        value: data?.name,
+        label: toUpperCaseFirstLetter(data?.name),
+      };
+      if (data && data.name) {
+        setPokemonOptions([...pokemonOptions, newOption]);
+        setInputPokemonName(newOption.value);
+      } else {
+        setError(`The Pokémon ${inputValue} does not exist.`);
+      }
+    } catch (error) {
+      setError("Invalid pokemon entered.");
+      setPokemonData(null);
+    }
   };
 
   function getBackgroundColor(type) {
@@ -143,7 +187,6 @@ export default function Pokedex() {
   }
 
   function getTextColor(type) {
-    // const type = pokemonData?.types[0]?.type?.name;
     switch (type) {
       case "fire":
         return "#D6350c";
@@ -216,13 +259,15 @@ export default function Pokedex() {
             <span className="absolute inset-y-0 left-0 flex items-center pl-2">
               <HiOutlineMagnifyingGlass className="h-5 w-5 fill-slate-300" />
             </span>
-            <input
-              className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-4 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-              type="text"
-              name="search"
-              placeholder="Enter Pokemon Name or ID"
+            <CreatableSelect
               value={inputPokemonName}
-              onChange={(e) => setInputPokemonName(e.target.value)}
+              onChange={handleInputChange}
+              onCreateOption={handleCreateOption}
+              options={pokemonOptions}
+              isClearable
+              menuId="pokemon-name-select"
+              idPrefix="pokemon-name-select"
+              placeholder={toUpperCaseFirstLetter(inputPokemonName)}
             />
           </label>
           <button className={formStyles.pokedex_search_btn} type="submit">
@@ -253,16 +298,16 @@ export default function Pokedex() {
               </div>
               {pokemonSpriteImage != null && (
                 <img
-                className={pokedexStyles.pokemon_image}
-                src={pokemonSpriteImage}
-                alt=""
+                  className={pokedexStyles.pokemon_image}
+                  src={pokemonSpriteImage}
+                  alt=""
                 />
               )}
               {pokemonSpriteImage == null && officialArtwork != null && (
                 <img
-                className={pokedexStyles.pokemon_image}
-                src={officialArtwork}
-                alt=""
+                  className={pokedexStyles.pokemon_image}
+                  src={officialArtwork}
+                  alt=""
                 />
               )}
             </div>
@@ -396,19 +441,6 @@ export default function Pokedex() {
                   min: {getMinStat(baseSpDf)} &nbsp;max: {getMaxStat(baseSpDf)}
                 </p>
               </div>
-              {/* <div className={progressBarStyles.progress_bars}>
-                <p className="mx-3 font-bold">EXP | {baseExp}</p>
-                <ProgressBar
-                  value={baseExp}
-                  min={getMinStat(baseExp)}
-                  max={getMaxStat(baseExp)}
-                  color={getMaxStat(baseExp)}
-                  width="150px"
-                />
-                <p className="px-2 font-bold">
-                  min: {getMinStat(baseExp)} &nbsp;max: {getMaxStat(baseExp)}
-                </p>
-              </div> */}
             </div>
           </div>
         </div>
