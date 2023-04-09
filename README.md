@@ -4,11 +4,21 @@ Pokedex
 
 An application used to search any Pokémon you could think of and have a beautifully created custom Pokémon card with all of its stats listed to view. Utilizes pokeAPI
 
-## Project Status:
+## Technologies Used
+
+React, Next.js, Next-Auth, Tailwindcss, and Next-PWA. 
+
+## Project Status
 
 #### LIVE
 
 This project's first iteration has recently be published. Users can access the main application by using one of the various login method presented on the home page. These include but are not limited to Google signin, GitHub sign-in, and down the road, fully fledged user registration tied to a cloud database. 
+
+## Where to Find?
+
+Project is currently hosted via Vercel and is acseccible through my website -> [anthonyberrios.com](anthonyberrios.com)
+
+Project can also be acessed through the Vercel deployment direct link -> [https://pokedex-sepia-eta.vercel.app](https://pokedex-sepia-eta.vercel.app)
 
 ## Project Screen Shot(s)
 
@@ -17,10 +27,6 @@ This project's first iteration has recently be published. Users can access the m
 ![pokedex3](https://user-images.githubusercontent.com/54926487/230783619-44c4b755-889d-438d-b7cc-62d40455c7c3.png)
 
 ![pokedex1](https://user-images.githubusercontent.com/54926487/230783608-0332a366-7574-40cf-b098-f137327cd499.png)
-
-## Technologies Used
-
-React, Next.js, Next-Auth, Tailwindcss, and Next-PWA. 
 
 ## Installation and Setup Instructions
   
