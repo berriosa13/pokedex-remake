@@ -89,7 +89,7 @@ export default function Login() {
         <p className="text-center text-black font-bold z-10 mb-3">
           Don't have an account yet?{" "}
           <Link href={"/register"}>
-            <a className="text-blue-700 mx-1">Sign Up</a>
+          <a className="text-blue-700 mx-2"><br/>Sign up</a>
           </Link>
         </p>
       </section>

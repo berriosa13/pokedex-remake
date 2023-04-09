@@ -69,7 +69,7 @@ export default function Register() {
         <p className="text-center text-black font-bold z-10 mb-3">
           Already have an account?{" "}
           <Link href={"/login"}>
-            <a className="text-blue-700 mx-1">Login</a>
+            <a className="text-blue-700 mx-1"><br/>Login</a>
           </Link>
         </p>
       </section>
